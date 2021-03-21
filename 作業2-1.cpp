@@ -1,4 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include "memory.h"
 #include <iostream>
@@ -70,14 +70,10 @@ polynomial Attach(polynomial p, int coef, int expo)
 
 polynomial Remove(polynomial p, int expo)
 {
-	p.coef[expo] = 0;
-	for (int i = p.degree; i>=0;i--) { //刪掉最高次方
-		if (p.coef[i] != 0) {			//若係數有值，因為是從原先最大係數開始跑，所以易找到有值，直接設他為最大值。
+	p.coef[expo] = 0;	
+	for (int i = p.degree; i >= 0; i--) {
+		if (p.coef[i]) {
 			p.degree = i;
-			break;
-		}
-		if (i == 0 && p.coef[i] == 0) {
-			p.degree = 0;
 			break;
 		}
 	}
@@ -90,7 +86,7 @@ void attach(int coef, int expo)//次方一樣大的，係數加起來
 		return;
 
 	terms[avail].coef = coef;
-	terms[avail++].expo = expo;
+	terms[avail++].expo = expo;//avail++ 往後移動
 }
 
 void PrintPoly1(polynomial p)
@@ -115,27 +111,34 @@ void PrintPoly1(polynomial p)
 
 void PrintPoly2(polynomial_term t[], int start, int finish)
 {
-	int pre_max = 10000;
-	int max_expo;
-	int max_coef;
-	for (int i = start; i < finish; i++) {
-		if (max_expo < t[i].expo) {
+		
+	int max_expo=t[start].expo;
+	int max_coef=t[start].coef;
+	for (int i = start; i <=finish; i++) {
+		if (max_expo <= t[i].expo) {
 			max_expo = t[i].expo;
+			max_coef = t[i].coef;
 		}
-	}
-	/*
-	for (int i = start; i <= finish; i++) {
-		if (i == start) {
-			cout << t[start].coef<<"X^"<<t[start].expo<<" + ";
-			continue;
+	}	
+	cout << max_coef<<"X^"<< max_expo;
+	max_expo--;
+	while (max_expo>=0)
+	{		
+		for (int i = finish; i >= start;i--) {
+			
+			if (t[i].expo== max_expo) {				
+				if (max_expo == 0) {
+					cout <<" + "<< t[i].coef;
+					continue;
+				}else{
+					cout <<" + "<< t[i].coef << "X^" << t[i].expo ;
+					continue;
+				}
+			}			
 		}
-		if (i == finish) {
-			cout << t[finish].coef << "X^" << t[finish].expo;
-			break;
-		}
-		cout << t[i].coef << "X^" << t[i].expo << " + ";
-	}
-	*/
+		
+		max_expo--;
+	}	
 }
 
 polynomial padd1(polynomial p1, polynomial p2)
@@ -182,7 +185,7 @@ polynomial padd1(polynomial p1, polynomial p2)
 void padd2(int starta, int finisha, int startb, int finishb, int* startd, int* finishd)
 {
 	int sum;
-
+	
 	*startd = avail;
 
 	while (starta <= finisha && startb <= finishb) {
