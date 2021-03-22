@@ -127,28 +127,23 @@ void PrintPoly2(polynomial_term t[], int start, int finish)
 		}
 	}
 
-/*	for (int i = finish; i >= start; i--) {
-		if (t[i].expo == max_expo&&t[i].coef != 0)
-			if (max_coef != 0 && notme == 1) {
-				cout << " + " << t[i].coef << "X^" << t[i].expo;
-				continue;
-			}else  if (max_coef) {
-				cout << t[i].coef << "X^" << t[i].expo;
-				notme = 1;
-				continue;
-			}			
-	}
-	max_expo--;*/
+
 	while (max_expo >= 0) {
 		for (int i = finish; i >= start; i--) {
 			if (t[i].expo == max_expo&&t[i].coef != 0) {
-				if (flag == 1) {
+				if (flag == 1&&max_expo!=0) {
 					cout << t[i].coef << "X^" << t[i].expo;
 					flag = 0;
 					continue;
 				}
 				else if (max_expo == 0) {
-					cout << " + " << t[i].coef;
+					if (flag == 1) {
+						cout <<  t[i].coef;
+					}
+					else {
+						cout << " + " << t[i].coef;
+					}
+					
 					break;
 				}
 				else {
@@ -159,10 +154,7 @@ void PrintPoly2(polynomial_term t[], int start, int finish)
 			
 		}
 		max_expo--;
-	}
-
-
-	
+	}	
 }
 
 
