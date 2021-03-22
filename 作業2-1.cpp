@@ -29,7 +29,7 @@ polynomial Zero(polynomial p)
 
 int IsZero(polynomial p)
 {
-	if (p.coef[0]==0&&p.degree==0) {
+	if (p.coef[p.degree]==0&&p.degree==0) {
 		return 1;
 	}else {
 		return 0;
@@ -43,15 +43,13 @@ int Lead_Exp(polynomial p)
 
 int COMPARE(int i, int j)
 {
-	if (i == j) {
-		return 0;
-	}
-	else if (i > j) {
+	if (i > j) {
 		return 1;
 	}
 	else if(j>i){
 		return -1;
-	}	
+	}
+	return 0;
 }
 
 int Coef(polynomial p, int expo)
@@ -62,7 +60,7 @@ int Coef(polynomial p, int expo)
 polynomial Attach(polynomial p, int coef, int expo)
 {
 	p.coef[expo] += coef;
-	if (coef != 0 && p.degree < expo) {
+	if (p.degree < expo) {
 		p.degree = expo;
 	}
 	return p;
@@ -72,7 +70,11 @@ polynomial Remove(polynomial p, int expo)
 {
 	p.coef[expo] = 0;	
 	for (int i = p.degree; i >= 0; i--) {
-		if (p.coef[i]) {
+		if (p.coef[i] == 0 && i == 0) {
+			p.degree = 0;
+			break;
+		}
+		else if (p.coef[i]!=0) {
 			p.degree = i;
 			break;
 		}
@@ -112,6 +114,7 @@ void PrintPoly1(polynomial p)
 void PrintPoly2(polynomial_term t[], int start, int finish)
 {
 		
+	int flag = 0;
 	int max_expo=t[start].expo;
 	int max_coef=t[start].coef;
 	for (int i = start; i <=finish; i++) {
@@ -120,16 +123,27 @@ void PrintPoly2(polynomial_term t[], int start, int finish)
 			max_coef = t[i].coef;
 		}
 	}	
-	cout << max_coef<<"X^"<< max_expo;
+	if (max_coef) {
+		cout << max_coef << "X^" << max_expo;
+	}
+	else {
+		flag = 1;
+	}
+	
 	max_expo--;
 	while (max_expo>=0)
 	{		
 		for (int i = finish; i >= start;i--) {
 			
-			if (t[i].expo== max_expo) {				
-				if (max_expo == 0) {
-					cout <<" + "<< t[i].coef;
+			if (t[i].expo== max_expo&&t[i].coef!=0) {				
+				if (flag == 1) {
+					cout << t[i].coef << "X^" << t[i].expo;
+					flag = 0;
 					continue;
+				}
+				else if (max_expo == 0) {
+					cout <<" + "<< t[i].coef;
+					break;
 				}else{
 					cout <<" + "<< t[i].coef << "X^" << t[i].expo ;
 					continue;
