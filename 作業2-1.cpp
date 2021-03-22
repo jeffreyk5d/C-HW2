@@ -29,11 +29,12 @@ polynomial Zero(polynomial p)
 
 int IsZero(polynomial p)
 {
-	if (p.coef[p.degree]==0&&p.degree==0) {
+	if (p.coef[p.degree] == 0 && p.degree == 0) {
 		return 1;
-	}else {
+	}
+	else {
 		return 0;
-	}			
+	}
 }
 
 int Lead_Exp(polynomial p)
@@ -46,7 +47,7 @@ int COMPARE(int i, int j)
 	if (i > j) {
 		return 1;
 	}
-	else if(j>i){
+	else if (j>i) {
 		return -1;
 	}
 	return 0;
@@ -68,13 +69,13 @@ polynomial Attach(polynomial p, int coef, int expo)
 
 polynomial Remove(polynomial p, int expo)
 {
-	p.coef[expo] = 0;	
+	p.coef[expo] = 0;
 	for (int i = p.degree; i >= 0; i--) {
 		if (p.coef[i] == 0 && i == 0) {
 			p.degree = 0;
 			break;
 		}
-		else if (p.coef[i]!=0) {
+		else if (p.coef[i] != 0) {
 			p.degree = i;
 			break;
 		}
@@ -113,47 +114,57 @@ void PrintPoly1(polynomial p)
 
 void PrintPoly2(polynomial_term t[], int start, int finish)
 {
-		
-	int flag = 0;
-	int max_expo=t[start].expo;
-	int max_coef=t[start].coef;
-	for (int i = start; i <=finish; i++) {
+
+	int flag = 1;
+	int notme = 0;
+	int go = 0;
+	int max_expo = t[start].expo;
+	int max_coef = t[start].coef;
+	for (int i = start; i <= finish; i++) {
 		if (max_expo <= t[i].expo) {
 			max_expo = t[i].expo;
 			max_coef = t[i].coef;
 		}
-	}	
-	if (max_coef) {
-		cout << max_coef << "X^" << max_expo;
 	}
-	else {
-		flag = 1;
+
+/*	for (int i = finish; i >= start; i--) {
+		if (t[i].expo == max_expo&&t[i].coef != 0)
+			if (max_coef != 0 && notme == 1) {
+				cout << " + " << t[i].coef << "X^" << t[i].expo;
+				continue;
+			}else  if (max_coef) {
+				cout << t[i].coef << "X^" << t[i].expo;
+				notme = 1;
+				continue;
+			}			
 	}
-	
-	max_expo--;
-	while (max_expo>=0)
-	{		
-		for (int i = finish; i >= start;i--) {
-			
-			if (t[i].expo== max_expo&&t[i].coef!=0) {				
+	max_expo--;*/
+	while (max_expo >= 0) {
+		for (int i = finish; i >= start; i--) {
+			if (t[i].expo == max_expo&&t[i].coef != 0) {
 				if (flag == 1) {
 					cout << t[i].coef << "X^" << t[i].expo;
 					flag = 0;
 					continue;
 				}
 				else if (max_expo == 0) {
-					cout <<" + "<< t[i].coef;
+					cout << " + " << t[i].coef;
 					break;
-				}else{
-					cout <<" + "<< t[i].coef << "X^" << t[i].expo ;
+				}
+				else {
+					cout << " + " << t[i].coef << "X^" << t[i].expo;
 					continue;
 				}
-			}			
+			}
+			
 		}
-		
 		max_expo--;
-	}	
+	}
+
+
+	
 }
+
 
 polynomial padd1(polynomial p1, polynomial p2)
 {
@@ -199,7 +210,7 @@ polynomial padd1(polynomial p1, polynomial p2)
 void padd2(int starta, int finisha, int startb, int finishb, int* startd, int* finishd)
 {
 	int sum;
-	
+
 	*startd = avail;
 
 	while (starta <= finisha && startb <= finishb) {
@@ -242,7 +253,7 @@ int main()
 	a.degree = b.degree = d.degree = 0;
 
 	a = Zero(a); //創多項式空間
-	b = Zero(b);	
+	b = Zero(b);
 	d = Zero(d);  //用來存a+b多項式的
 
 	while (1) {
@@ -304,6 +315,6 @@ int main()
 	padd2(starta, finisha, startb, finishb, &startd, &finishd);
 	printf("\nd = ");
 	PrintPoly2(terms, startd, finishd);
-
+	system("pause");
 	return 0;
 }
